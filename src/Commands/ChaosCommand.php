@@ -13,7 +13,7 @@ class ChaosCommand extends Command
 {
     public $signature = 'chaos:process';
 
-    public $description = 'Deletes a random file at a random time once per week.';
+    public $description = 'Deletes a random file at a random time based on configured interval.';
 
     public function handle(): int
     {
@@ -97,10 +97,18 @@ class ChaosCommand extends Command
 
     protected function scheduleNextRun(): void
     {
-        // Schedule next run for a random time in the next week (10080 minutes)
-        // Adding some randomness to the interval
-        $minutes = rand(100, 10080); 
-        $nextRun = now()->addMinutes($minutes);
+        $interval = config('chaos.interval', 'week');
+        
+        // Calculate random time within the interval
+        $nextRun = match($interval) {
+            'minute' => now()->addMinutes(rand(1, 1)),
+            'hour' => now()->addMinutes(rand(1, 60)),
+            'day' => now()->addMinutes(rand(1, 1440)), // 24 hours
+            'week' => now()->addMinutes(rand(1, 10080)), // 7 days
+            'month' => now()->addMinutes(rand(1, 43200)), // 30 days
+            default => now()->addMinutes(rand(1, 10080)), // default to week
+        };
+        
         Cache::put('chaos.next_run', $nextRun);
         
         $this->info("Next chaos scheduled for: " . $nextRun->toDateTimeString());

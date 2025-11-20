@@ -41,6 +41,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Chaos Interval
+    |--------------------------------------------------------------------------
+    |
+    | How often chaos should occur. Supported values:
+    | - 'minute' (every minute)
+    | - 'hour' (every hour)  
+    | - 'day' (every day)
+    | - 'week' (every week)
+    | - 'month' (every month)
+    |
+    */
+    'interval' => env('CHAOS_INTERVAL', 'week'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Target Paths
     |--------------------------------------------------------------------------
     |
@@ -78,7 +93,20 @@ return [
 
 Once installed and enabled, the package registers a scheduled command `chaos:process` that runs hourly.
 
-The command checks if it's time to "unleash chaos" based on a random schedule (once per week). If it is time, it will pick a random file from your configured `paths` and delete it.
+The command checks if it's time to "unleash chaos" based on a random schedule within your configured interval (default: once per week). If it is time, it will pick a random file from your configured `paths` and delete it.
+
+### Configuration
+
+1. Set the interval in your `.env`:
+   ```env
+   CHAOS_ENABLED=true
+   CHAOS_INTERVAL=week  # minute, hour, day, week, or month
+   ```
+
+2. Or publish and edit the config file:
+   ```bash
+   php artisan vendor:publish --tag="laravel-chaos-testing-config"
+   ```
 
 You can also run the command manually:
 
