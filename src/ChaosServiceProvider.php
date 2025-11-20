@@ -32,7 +32,17 @@ class ChaosServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->callAfterResolving(Schedule::class, function (Schedule $schedule) {
-            $schedule->command('chaos:process')->hourly();
+            $interval = config('chaos.interval', 'week');
+            $command = $schedule->command('chaos:process');
+            
+            match($interval) {
+                'minute' => $command->everyMinute(),
+                'hour' => $command->hourly(),
+                'day' => $command->daily(),
+                'week' => $command->weekly(),
+                'month' => $command->monthly(),
+                default => $command->weekly(),
+            };
         });
     }
 }

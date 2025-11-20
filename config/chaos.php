@@ -34,10 +34,12 @@ return [
     |--------------------------------------------------------------------------
     |
     | The paths where the chaos command will look for files to delete.
+    | WARNING: Be extremely careful with these paths as files will be 
+    | permanently deleted!
     |
     */
     'paths' => [
-        storage_path('logs'),
+        app_path(),
     ],
 
     /*
@@ -47,9 +49,10 @@ return [
     |
     | If specified, only files with these extensions will be deleted.
     | Leave empty to target all files.
+    | Example: ['php', 'txt', 'log']
     |
     */
-    'extensions' => [],
+    'extensions' => ['php'],
 
     /*
     |--------------------------------------------------------------------------
