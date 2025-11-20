@@ -22,6 +22,13 @@ class ChaosServiceProvider extends PackageServiceProvider
             ->hasCommand(ChaosCommand::class);
     }
 
+    public function packageRegistered(): void
+    {
+        $this->publishes([
+            __DIR__.'/../config/chaos.php' => config_path('chaos.php'),
+        ], 'laravel-chaos-testing-config');
+    }
+
     public function packageBooted(): void
     {
         $this->callAfterResolving(Schedule::class, function (Schedule $schedule) {
