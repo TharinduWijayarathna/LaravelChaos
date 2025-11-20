@@ -20,7 +20,7 @@ composer require laravel-chaos/testing
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="chaos-config"
+php artisan vendor:publish --tag="laravel-chaos-testing-config"
 ```
 
 This is the contents of the published config file:
